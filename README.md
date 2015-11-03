@@ -9,5 +9,6 @@ This plugin adds enables one for you.
 Currently it simply enables the Tcl prompt built into pd-gui
 (since Pd-0.47 it can no longer be enabled from within Pd).
 
-## AUTHOR
+## AUTHORS
 IOhannes m zmölnig
+Hans-Christoph Steiner
