@@ -83,7 +83,7 @@ proc ::tclprompt::create {} {
     bind .pdwindow.tclprompt.entry <Down>   "::tclprompt::get_history -1"
     bind .pdwindow.tclprompt.entry <KeyRelease> +"::tclprompt::validate_tcl"
 
-    bind .pdwindow.text <Key-Tab> "puts tclprompt; focus .pdwindow.tclprompt.entry; puts bye; break"
+    bind .pdwindow.text <Key-Tab> "focus .pdwindow.tclprompt.entry; break"
 
     pack .pdwindow.tclprompt
     pack .pdwindow.text
