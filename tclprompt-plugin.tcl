@@ -76,6 +76,7 @@ proc ::tclprompt::create {} {
        -exportselection 1 -insertwidth 2 -insertbackground blue \
        -textvariable ::tclprompt::tclentry -font {$::font_family -12}
     pack .pdwindow.tclprompt.entry -side left -fill x
+
 # bindings for the Tcl entry widget
     bind .pdwindow.tclprompt.entry <$::modifier-Key-a> "%W selection range 0 end; break"
     bind .pdwindow.tclprompt.entry <Return> "::tclprompt::eval_tclentry"
@@ -85,8 +86,7 @@ proc ::tclprompt::create {} {
 
     bind .pdwindow.text <Key-Tab> "focus .pdwindow.tclprompt.entry; break"
 
-    pack .pdwindow.tclprompt
-    pack .pdwindow.text
+#    pack .pdwindow.tclprompt
 }
 
 
