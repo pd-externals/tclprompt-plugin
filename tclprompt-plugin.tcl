@@ -5,6 +5,13 @@
 
 package require pdwindow 0.1
 namespace eval ::tclprompt:: { }
+
+proc ::tclprompt_disable_menu {} {
+    # disable the TclPrompt menu (as gives an error if we re-create)
+    set mymenu .menubar.help
+    if {[catch {$mymenu entryconfigure [_ "Tcl prompt"] -state disabled}]} { }
+}
+
 ## first check if the Pd-runtime provides a tcl_entry (and use it)
 if {[catch ::pdwindow::create_tcl_entry errorname]} {
 
@@ -93,6 +100,7 @@ if {[catch ::pdwindow::create_tcl_entry errorname]} {
 	::destroy .pdwindow.tclprompt
     }
 
+    ::tclprompt_disable_menu
     set mymenu .menubar.help
     $mymenu add separator
     $mymenu add check -label [_ "Tcl prompt"] -variable ::tclprompt::show \
@@ -105,6 +113,8 @@ if {[catch ::pdwindow::create_tcl_entry errorname]} {
 
 } else {
     puts "built-in TclPrompt"
+    ::tclprompt_disable_menu
+
     proc ::tclprompt::create {} {}
     proc ::tclprompt::destroy {} {
 	# actually we *can* destroy it, but we cannot re-create it
