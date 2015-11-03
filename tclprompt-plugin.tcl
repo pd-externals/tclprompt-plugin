@@ -1,6 +1,6 @@
 # META TCL/TK prompt plugin
 # META DESCRIPTION enables a wee Tcl/Tk cmdline within the Pd-console
-# META AUTHOR IOhannes m zmölnig <zmoelnig@umlaeute.mur.at>
+# META AUTHOR IOhannes m zmölnig <zmoelnig@umlaeute.mur.at>, Hans-Christoph Steiner <hans@eds.org>
 # META VERSION 0.1
 
 package require pdwindow 0.1
@@ -8,7 +8,7 @@ package require pdwindow 0.1
 ## first check if the Pd-runtime provides a tcl_entry (and use it)
 if {[catch ::pdwindow::create_tcl_entry errorname]} {
 
-    ## if that fails, we need to provide our own
+## if that fails, we need to provide our own (code shamelessly taken from Pd-0.46)
 
 namespace eval ::tclprompt:: {
     variable tclentry {}
@@ -49,8 +49,8 @@ proc ::tclprompt::get_history {direction} {
     if {$history_position > [llength $tclentry_history]} {
         set history_position [llength $tclentry_history]
     }
-    .pdwindow.tcl.entry delete 0 end
-    .pdwindow.tcl.entry insert 0 \
+    .pdwindow.tclprompt.entry delete 0 end
+    .pdwindow.tclprompt.entry insert 0 \
         [lindex $tclentry_history end-[expr $history_position - 1]]
 }
 
@@ -58,9 +58,9 @@ proc ::tclprompt::get_history {direction} {
 proc ::tclprompt::validate_tcl {} {
     variable tclentry
     if {[info complete $tclentry]} {
-        .pdwindow.tcl.entry configure -background "white"
+        .pdwindow.tclprompt.entry configure -background "white"
     } else {
-        .pdwindow.tcl.entry configure -background "#FFF0F0"
+        .pdwindow.tclprompt.entry configure -background "#FFF0F0"
     }
 }
 
@@ -68,25 +68,25 @@ proc ::tclprompt::validate_tcl {} {
 
 proc ::tclprompt::create {} {
     # Tcl entry box frame
-    frame .pdwindow.tcl -borderwidth 0
-    pack .pdwindow.tcl -side bottom -fill x
-
-    label .pdwindow.tcl.label -text [_ "Tcl:"] -anchor e
-    pack .pdwindow.tcl.label -side left
-    entry .pdwindow.tcl.entry -width 200 \
+    frame .pdwindow.tclprompt -borderwidth 0
+    pack .pdwindow.tclprompt -side bottom -fill x -before .pdwindow.text
+    label .pdwindow.tclprompt.label -text [_ "Tcl:"] -anchor e
+    pack .pdwindow.tclprompt.label -side left
+    entry .pdwindow.tclprompt.entry -width 200 \
        -exportselection 1 -insertwidth 2 -insertbackground blue \
        -textvariable ::tclprompt::tclentry -font {$::font_family -12}
-    pack .pdwindow.tcl.entry -side left -fill x
+    pack .pdwindow.tclprompt.entry -side left -fill x
 # bindings for the Tcl entry widget
-    bind .pdwindow.tcl.entry <$::modifier-Key-a> "%W selection range 0 end; break"
-    bind .pdwindow.tcl.entry <Return> "::tclprompt::eval_tclentry"
-    bind .pdwindow.tcl.entry <Up>     "::tclprompt::get_history 1"
-    bind .pdwindow.tcl.entry <Down>   "::tclprompt::get_history -1"
-    bind .pdwindow.tcl.entry <KeyRelease> +"::tclprompt::validate_tcl"
+    bind .pdwindow.tclprompt.entry <$::modifier-Key-a> "%W selection range 0 end; break"
+    bind .pdwindow.tclprompt.entry <Return> "::tclprompt::eval_tclentry"
+    bind .pdwindow.tclprompt.entry <Up>     "::tclprompt::get_history 1"
+    bind .pdwindow.tclprompt.entry <Down>   "::tclprompt::get_history -1"
+    bind .pdwindow.tclprompt.entry <KeyRelease> +"::tclprompt::validate_tcl"
 
-    bind .pdwindow.text <Key-Tab> "focus .pdwindow.tcl.entry; break"
+    bind .pdwindow.text <Key-Tab> "puts tclprompt; focus .pdwindow.tclprompt.entry; puts bye; break"
 
-    pack .pdwindow.tcl
+    pack .pdwindow.tclprompt
+    pack .pdwindow.text
 }
 
 
