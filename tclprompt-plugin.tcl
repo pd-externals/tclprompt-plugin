@@ -94,6 +94,7 @@ if {[catch ::pdwindow::create_tcl_entry errorname]} {
 
     ::tclprompt::create
 } else {
+    puts "built-in TclPrompt"
     proc ::tclprompt::create {} {}
     proc ::tclprompt::destroy {} {
 	# actually we *can* destroy it, but we cannot re-create it
