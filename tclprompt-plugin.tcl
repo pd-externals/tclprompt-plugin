@@ -94,9 +94,15 @@ if {[catch ::pdwindow::create_tcl_entry errorname]} {
 
     ::tclprompt::create
 } else {
+    proc ::tclprompt::create {} {}
     proc ::tclprompt::destroy {} {
-	::destroy .pdwindow.tcl
+	# actually we *can* destroy it, but we cannot re-create it
+	::pdwindow::error "cannot destroy built-in TclPrompt"
     }
 }
 
+proc ::tclprompt::test {} {
+    after 1000 ::tclprompt::create
+    ::tclprompt::destroy
+}
 pdtk_post "loaded tclprompt-plugin\n"
