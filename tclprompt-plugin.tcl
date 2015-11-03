@@ -14,6 +14,7 @@ if {[catch ::pdwindow::create_tcl_entry errorname]} {
 	variable tclentry {}
 	variable tclentry_history {"console show"}
 	variable history_position 0
+	variable show 1
     }
 
     proc ::tclprompt::eval_tclentry {} {
@@ -92,7 +93,16 @@ if {[catch ::pdwindow::create_tcl_entry errorname]} {
 	::destroy .pdwindow.tclprompt
     }
 
+    set mymenu .menubar.help
+    $mymenu add separator
+    $mymenu add check -label [_ "Tcl prompt"] -variable ::tclprompt::show \
+        -command {::tclprompt::toggle $::tclprompt::show}
+
+# bind all <$::modifier-Key-s> {::deken::open_helpbrowser .helpbrowser2}
+
     ::tclprompt::create
+
+
 } else {
     puts "built-in TclPrompt"
     proc ::tclprompt::create {} {}
@@ -102,6 +112,9 @@ if {[catch ::pdwindow::create_tcl_entry errorname]} {
     }
 }
 
+proc ::tclprompt::toggle {state} {
+    if { $state } { ::tclprompt::create } { ::tclprompt::destroy }
+}
 proc ::tclprompt::test {} {
     after 1000 ::tclprompt::create
     ::tclprompt::destroy
