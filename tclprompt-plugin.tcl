@@ -13,7 +13,7 @@ proc ::tclprompt_disable_menu {} {
 }
 
 ## first check if the Pd-runtime provides a tcl_entry (and use it)
-if {[catch ::pdwindow::create_tcl_entry errorname]} {
+if {[catch XXX::pdwindow::create_tcl_entry errorname]} {
 
     ## if that fails, we need to provide our own (code shamelessly taken from Pd-0.46)
 
