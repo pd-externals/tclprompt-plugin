@@ -118,7 +118,11 @@ if {[catch XXX::pdwindow::create_tcl_entry errorname]} {
 
     ::tclprompt_disable_menu
     set mymenu .menubar.help
-    $mymenu add separator
+    if {[winfo exists .menubar.tools]} {
+        set mymenu .menubar.tools
+    } else {
+        $mymenu add separator
+    }
     $mymenu add check -label [_ "Tcl prompt"] -variable ::tclprompt::show \
         -command {::tclprompt::toggle $::tclprompt::show}
 
