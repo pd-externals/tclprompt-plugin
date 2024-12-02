@@ -22,6 +22,7 @@ if {[catch XXX::pdwindow::create_tcl_entry errorname]} {
 	variable tclentry_history {"console show"}
 	variable history_position 0
 	variable show 1
+	variable loglevel 2
     }
 
     proc ::tclprompt::eval_tclentry {} {
@@ -29,7 +30,12 @@ if {[catch XXX::pdwindow::create_tcl_entry errorname]} {
 	variable tclentry_history
 	variable history_position 0
 	if {$tclentry eq ""} {return} ;# no need to do anything if empty
-	if {[catch {uplevel #0 $tclentry} errorname]} {
+	if {[catch {
+            set ret [uplevel #0 ${tclentry}]
+            if {$ret ne ""} {
+                ::pdwindow::logpost "" $::tclprompt::loglevel "${ret}\n"
+            }
+        } errorname]} {
 	    global errorInfo
 	    switch -regexp -- $errorname {
 		"missing close-brace" {
@@ -97,6 +103,13 @@ if {[catch XXX::pdwindow::create_tcl_entry errorname]} {
 
 	bind .pdwindow.text <Key-Tab> "focus .pdwindow.tclprompt.entry; break"
 	#    pack .pdwindow.tclprompt
+
+        catch {
+            # some random (negative) number as level, so the output is never filtered
+            set level -0.1733134514
+            .pdwindow.text.internal tag configure log${level} -foreground "#000" -background "#ccc"
+            set ::tclprompt::loglevel ${level}
+        }
     }
 
     proc ::tclprompt::destroy {} {
