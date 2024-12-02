@@ -65,10 +65,13 @@ if {[catch XXX::pdwindow::create_tcl_entry errorname]} {
 
     proc ::tclprompt::validate_tcl {} {
 	variable tclentry
+	set entry .pdwindow.tclprompt.entry
 	if {[info complete $tclentry]} {
-	    .pdwindow.tclprompt.entry configure -background "white"
+	    set col [option get $entry background Entry]
+	    if { $col == "" } {set col "white" }
+	    $entry configure -background ${col}
 	} else {
-	    .pdwindow.tclprompt.entry configure -background "#FFF0F0"
+	    $entry configure -background "#FFF0F0"
 	}
     }
 
