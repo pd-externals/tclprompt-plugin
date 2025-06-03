@@ -111,21 +111,6 @@ proc ::tclprompt::destroy {} {
     ::destroy .pdwindow.tclprompt
 }
 
-::tclprompt_disable_menu
-set mymenu .menubar.help
-if {[winfo exists .menubar.tools]} {
-    set mymenu .menubar.tools
-} else {
-    $mymenu add separator
-}
-$mymenu add check -label [_ "Tcl prompt"] -variable ::tclprompt::show \
-    -command {::tclprompt::toggle $::tclprompt::show}
-
-# bind all <$::modifier-Key-s> {::deken::open_helpbrowser .helpbrowser2}
-
-::tclprompt::create
-
-
 proc ::tclprompt::toggle {state} {
     if { $state } { ::tclprompt::create } { ::tclprompt::destroy }
 }
@@ -133,4 +118,23 @@ proc ::tclprompt::test {} {
     after 1000 ::tclprompt::create
     ::tclprompt::destroy
 }
-pdtk_post "loaded tclprompt-plugin\n"
+
+proc ::tclprompt::setup {} {
+    ::tclprompt_disable_menu
+    set mymenu .menubar.help
+    if {[winfo exists .menubar.tools]} {
+        set mymenu .menubar.tools
+    } else {
+        $mymenu add separator
+    }
+    $mymenu add check -label [_ "Tcl prompt"] -variable ::tclprompt::show \
+        -command {::tclprompt::toggle $::tclprompt::show}
+
+    # bind all <$::modifier-Key-s> {::deken::open_helpbrowser .helpbrowser2}
+
+    ::tclprompt::create
+    pdtk_post "loaded tclprompt-plugin\n"
+}
+
+
+::tclprompt::setup
