@@ -80,6 +80,7 @@ proc ::tclprompt::validate_tcl {} {
 
 proc ::tclprompt::create {} {
     # Tcl entry box frame
+    set ::tclprompt::show 1
     if [winfo exists .pdwindow.tclprompt] {
         return
     }
@@ -111,11 +112,16 @@ proc ::tclprompt::create {} {
 }
 
 proc ::tclprompt::destroy {} {
+    set ::tclprompt::show 0
     ::destroy .pdwindow.tclprompt
 }
 
-proc ::tclprompt::toggle {state} {
+proc ::tclprompt::toggle {{state {}}} {
+    if { $state eq "" } {
+        set state [expr ! [winfo exists .pdwindow.tclprompt]]
+    }
     if { $state } { ::tclprompt::create } { ::tclprompt::destroy }
+    set ::tclprompt::show [winfo exists .pdwindow.tclprompt]
 }
 proc ::tclprompt::test {} {
     after 1000 ::tclprompt::create
