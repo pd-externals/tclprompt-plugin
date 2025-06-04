@@ -19,6 +19,7 @@ namespace eval ::tclprompt:: {
     variable show 1
     # some random (negative) number as level, so the output is never filtered
     variable loglevel -0.1733134514
+    array set colors {bgvalid "white" bginvalid "#FFF0F0"}
 }
 
 proc ::tclprompt::eval_tclentry {} {
@@ -69,11 +70,9 @@ proc ::tclprompt::validate_tcl {} {
     variable tclentry
     set entry .pdwindow.tclprompt.entry
     if {[info complete $tclentry]} {
-        set col [option get $entry background Entry]
-        if { $col == "" } {set col "white" }
-        $entry configure -background ${col}
+        $entry configure -background ${::tclprompt::colors(bgvalid)}
     } else {
-        $entry configure -background "#FFF0F0"
+        $entry configure -background ${::tclprompt::colors(bginvalid)}
     }
 }
 
@@ -93,7 +92,12 @@ proc ::tclprompt::create {} {
     entry ${frame}.entry -width 200 \
         -exportselection 1 -insertwidth 2 -insertbackground blue \
         -textvariable ::tclprompt::tclentry -font {$::font_family -12}
-    pack .pdwindow.tclprompt.entry -side left -fill x
+    pack ${frame}.entry -side left -fill x
+
+    set col [option get ${frame}.entry background Entry]
+    if { $col ne "" } {
+        set ::tclprompt::colors(bgvalid) $col
+    }
 
     # bindings for the Tcl entry widget
     bind ${frame}.entry <$::modifier-Key-a> "%W selection range 0 end; break"
