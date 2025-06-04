@@ -105,6 +105,7 @@ proc ::tclprompt::create {} {
     bind ${frame}.entry <Return> "::tclprompt::eval_tclentry"
     bind ${frame}.entry <<PrevLine>>     "::tclprompt::get_history 1"
     bind ${frame}.entry <<NextLine>>   "::tclprompt::get_history -1"
+    bind ${frame}.entry <<Tools|TclPrompt>> {::tclprompt::toggle; break}
     bind ${frame}.entry <KeyRelease> +"::tclprompt::validate_tcl"
     bind .pdwindow.text <<NextWindow>> "focus ${frame}.entry; break"
 
