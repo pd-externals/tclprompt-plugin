@@ -81,28 +81,29 @@ proc ::tclprompt::validate_tcl {} {
 
 proc ::tclprompt::create {} {
     # Tcl entry box frame
+    set frame .pdwindow.tclprompt
     set ::tclprompt::show 1
-    if [winfo exists .pdwindow.tclprompt] {
+    if [winfo exists ${frame}] {
         return
     }
-    frame .pdwindow.tclprompt -borderwidth 0
-    pack .pdwindow.tclprompt -side bottom -fill x -before .pdwindow.text
-    label .pdwindow.tclprompt.label -text [_ "Tcl:"] -anchor e
-    pack .pdwindow.tclprompt.label -side left
-    entry .pdwindow.tclprompt.entry -width 200 \
+    frame ${frame} -borderwidth 0
+    pack ${frame} -side bottom -fill x -before .pdwindow.text
+    label ${frame}.label -text [_ "Tcl:"] -anchor e
+    pack ${frame}.label -side left
+    entry ${frame}.entry -width 200 \
         -exportselection 1 -insertwidth 2 -insertbackground blue \
         -textvariable ::tclprompt::tclentry -font {$::font_family -12}
     pack .pdwindow.tclprompt.entry -side left -fill x
 
     # bindings for the Tcl entry widget
-    bind .pdwindow.tclprompt.entry <$::modifier-Key-a> "%W selection range 0 end; break"
-    bind .pdwindow.tclprompt.entry <Return> "::tclprompt::eval_tclentry"
-    bind .pdwindow.tclprompt.entry <Up>     "::tclprompt::get_history 1"
-    bind .pdwindow.tclprompt.entry <Down>   "::tclprompt::get_history -1"
-    bind .pdwindow.tclprompt.entry <KeyRelease> +"::tclprompt::validate_tcl"
+    bind ${frame}.entry <$::modifier-Key-a> "%W selection range 0 end; break"
+    bind ${frame}.entry <Return> "::tclprompt::eval_tclentry"
+    bind ${frame}.entry <Up>     "::tclprompt::get_history 1"
+    bind ${frame}.entry <Down>   "::tclprompt::get_history -1"
+    bind ${frame}.entry <KeyRelease> +"::tclprompt::validate_tcl"
 
-    bind .pdwindow.text <Key-Tab> "focus .pdwindow.tclprompt.entry; break"
-    #    pack .pdwindow.tclprompt
+    bind .pdwindow.text <Key-Tab> "focus ${frame}.entry; break"
+    #    pack ${frame}
 }
 
 proc ::tclprompt::destroy {} {
