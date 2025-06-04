@@ -100,13 +100,14 @@ proc ::tclprompt::create {} {
     }
 
     # bindings for the Tcl entry widget
+    #bind ${frame}.entry <<SelectAll>> "%W selection range 0 end; break"
     bind ${frame}.entry <$::modifier-Key-a> "%W selection range 0 end; break"
     bind ${frame}.entry <Return> "::tclprompt::eval_tclentry"
-    bind ${frame}.entry <Up>     "::tclprompt::get_history 1"
-    bind ${frame}.entry <Down>   "::tclprompt::get_history -1"
+    bind ${frame}.entry <<PrevLine>>     "::tclprompt::get_history 1"
+    bind ${frame}.entry <<NextLine>>   "::tclprompt::get_history -1"
     bind ${frame}.entry <KeyRelease> +"::tclprompt::validate_tcl"
+    bind .pdwindow.text <<NextWindow>> "focus ${frame}.entry; break"
 
-    bind .pdwindow.text <Key-Tab> "focus ${frame}.entry; break"
     #    pack ${frame}
 
     ::tclprompt::validate_tcl
@@ -144,8 +145,6 @@ proc ::tclprompt::setup {} {
         -command "event generate \[focus\] <<Tools|TclPrompt>>"
 
     bind  all  <<Tools|TclPrompt>> {::tclprompt::toggle}
-
-    # bind all <$::modifier-Key-s> {::deken::open_helpbrowser .helpbrowser2}
 
     catch {
         .pdwindow.text.internal tag configure log${::tclprompt::loglevel} \
