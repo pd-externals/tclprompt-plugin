@@ -80,6 +80,9 @@ proc ::tclprompt::validate_tcl {} {
 
 proc ::tclprompt::create {} {
     # Tcl entry box frame
+    if [winfo exists .pdwindow.tclprompt] {
+        return
+    }
     frame .pdwindow.tclprompt -borderwidth 0
     pack .pdwindow.tclprompt -side bottom -fill x -before .pdwindow.text
     label .pdwindow.tclprompt.label -text [_ "Tcl:"] -anchor e
