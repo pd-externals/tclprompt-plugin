@@ -136,8 +136,13 @@ proc ::tclprompt::setup {} {
     } else {
         $mymenu add separator
     }
-    $mymenu add check -label [_ "Tcl prompt"] -variable ::tclprompt::show \
-        -command {::tclprompt::toggle $::tclprompt::show}
+
+    $mymenu add check \
+        -label [_ "Tcl prompt"] \
+        -variable ::tclprompt::show \
+        -command "event generate \[focus\] <<Tools|TclPrompt>>"
+
+    bind  all  <<Tools|TclPrompt>> {::tclprompt::toggle}
 
     # bind all <$::modifier-Key-s> {::deken::open_helpbrowser .helpbrowser2}
 
