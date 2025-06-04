@@ -108,6 +108,8 @@ proc ::tclprompt::create {} {
 
     bind .pdwindow.text <Key-Tab> "focus ${frame}.entry; break"
     #    pack ${frame}
+
+    ::tclprompt::validate_tcl
 }
 
 proc ::tclprompt::destroy {} {
