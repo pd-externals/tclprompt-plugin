@@ -17,7 +17,8 @@ namespace eval ::tclprompt:: {
     variable tclentry_history {"console show"}
     variable history_position 0
     variable show 1
-    variable loglevel 2
+    # some random (negative) number as level, so the output is never filtered
+    variable loglevel -0.1733134514
 }
 
 proc ::tclprompt::eval_tclentry {} {
@@ -102,13 +103,6 @@ proc ::tclprompt::create {} {
 
     bind .pdwindow.text <Key-Tab> "focus .pdwindow.tclprompt.entry; break"
     #    pack .pdwindow.tclprompt
-
-    catch {
-        # some random (negative) number as level, so the output is never filtered
-        set level -0.1733134514
-        .pdwindow.text.internal tag configure log${level} -foreground "#000" -background "#ccc"
-        set ::tclprompt::loglevel ${level}
-    }
 }
 
 proc ::tclprompt::destroy {} {
@@ -145,6 +139,11 @@ proc ::tclprompt::setup {} {
     bind  all  <<Tools|TclPrompt>> {::tclprompt::toggle}
 
     # bind all <$::modifier-Key-s> {::deken::open_helpbrowser .helpbrowser2}
+
+    catch {
+        .pdwindow.text.internal tag configure log${::tclprompt::loglevel} \
+            -foreground "#000" -background "#ccc"
+    }
 
     ::tclprompt::create
     pdtk_post "loaded tclprompt-plugin\n"
